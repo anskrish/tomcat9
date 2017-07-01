@@ -1,0 +1,4 @@
+---
+java_path: "/opt/java8/java"
+java_home: "/opt/java8/java/jdk1.8.0_131"
+tomcat_path: "/opt"

@@ -1,0 +1,5 @@
+---
+- name: install tomcat 9
+  hosts: cli
+  roles:
+      - tomcat9

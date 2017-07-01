@@ -1,0 +1,45 @@
+---
+- name: install java8 
+  yum: name=java-1.8.0-openjdk state=present
+- name: Download Jar file for tomcat9
+  get_url:
+    url: http://apache.mesi.com.ar/tomcat/tomcat-9/v9.0.0.M22/bin/apache-tomcat-9.0.0.M22.tar.gz
+    dest: /opt
+
+- name: untar and install tomcat9 on required location
+  command: tar xzvf /opt/apache-tomcat-9.0.0.M22.tar.gz -C "{{ tomcat_path }}"
+
+- name: Check if tomcat9 is already exists
+  stat:
+    path: "{{ tomcat_path }}/tomcat9"
+  register: tomcat9
+
+- name: rename tomcat9 source file to tomcat9
+  command: mv {{ tomcat_path }}/apache-tomcat-9.0.0.M22 {{ tomcat_path }}/tomcat9
+  when: not tomcat9.stat.exists
+
+- name: set the env varibales
+  command: "{{ item }}"
+  with_items:
+      - echo "export CATALINA_HOME="{{ tomcat_path }}"" >> /etc/environment
+#      - echo "export JAVA_HOME="{{ java_home }}"" >> /etc/environment
+#     - echo "export JRE_HOME="{{ java_home }}/jre"" >> /etc/environment
+  become: true
+  become_user: root
+
+- name: Source .bashrc
+  shell: source ~/.bashrc
+
+- name: start the tomcat9 role
+  shell: "/opt/tomcat9/bin/startup.sh"
+  register: command_result
+  become: true
+  become_user: root
+
+- name: start status results
+  debug:
+    var: command_result 
+- name: Download Jar file from github repo
+  get_url:
+    url: https://tomcat.apache.org/tomcat-6.0-doc/appdev/sample/sample.war
+    dest: "{{ tomcat_path }}/tomcat9/webapps"

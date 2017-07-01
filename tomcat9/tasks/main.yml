@@ -1,0 +1,5 @@
+---
+- name: update the machine
+  command: yum update -y
+#- include: java.yml
+- include: tomcat9.yml

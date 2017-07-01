@@ -1,0 +1,16 @@
+- name: Create needed directories
+  file:
+    path: "{{ java_path }}"
+    state: directory
+- name: scp the java tar file
+  synchronize: src=files/jdk-8u131-linux-x64.tar.gz dest=/opt
+- name: untar and install java on required location
+  command: tar xzvf /opt/jdk-8u131-linux-x64.tar.gz -C "{{ java_path }}"
+- name: Add JAVA_HOME environment variariables in bashrc
+  lineinfile: dest='/root/.bashrc' line='export JAVA_HOME={{ java_home }}'
+- name: Add Java bin folder to path in bashrc
+  lineinfile: dest='/root/.bashrc' line='export PATH=$PATH:$JAVA_HOME/bin'
+- name: Source .bashrc
+  shell: source ~/.bashrc
+
+
