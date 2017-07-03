@@ -35,10 +35,30 @@
   register: command_result
   become: true
   become_user: root
-
+  
 - name: start status results
   debug:
     var: command_result 
+    
+- name: stop the tomcat9 role
+  shell: "/opt/tomcat9/bin/shutdown.sh"
+  register: command_result1
+  become: true
+  become_user: root
+
+- name: start status results
+  debug:
+    var: command_result1
+- name: restart the tomcat9 role
+  shell: "/opt/tomcat9/bin/startup.sh"
+  register: command_result2
+  become: true
+  become_user: root
+  
+- name: start status results
+  debug:
+    var: command_result2
+    
 - name: Download Jar file from github repo
   get_url:
     url: https://tomcat.apache.org/tomcat-6.0-doc/appdev/sample/sample.war
