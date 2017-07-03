@@ -1,5 +1,5 @@
 ---
 - name: install tomcat 9
-  hosts: cli
+  hosts: 34.224.38.208
   roles:
       - tomcat9
